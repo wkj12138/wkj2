@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <script type="text/javascript" src="./axios.js"></script>
+  <script type="text/javascript" src="./jquery-2.1.0.js"></script>
+  <title>员工信息查询</title>
+  <style type="text/css">
+    body {
+      text-align: center;
+    }
+
+    #show {
+      margin: 0 auto;
+      width: 600px;
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+<div>
+  <h1>员工信息查询</h1>
+  <hr />
+  <span>请输入要查询的员工编号：</span>
+  <input id="usercode" />
+  <button onClick="SltByUC()" style="cursor:pointer;">查询</button>
+  <hr />
+</div>
+<br />
+<div id="show" style="text-align: center"></div>
+</body>
+<script type="text/javascript">
+    function SltByUC() {
+        var usercode = document.getElementById("usercode").value;
+        // console.log(usercode);
+        axios
+            .post("http://192.168.51.84:8099/select/" + usercode)
+            .then(response => {
+            console.log(response);
+        // console.log(response.data);
+
+        var data = response.data;
+
+        if (data.usercode == undefined) {
+            alert("经查询，没有此人信息");
+            $("#show").html("");
+        } else {
+            $("#show").html(
+                "<table style='width:600px;border:1px solid black;'>" +
+                "<tr'>" +
+                "<th style='border:2px solid black;'>工号</th>" +
+                "<th style='border:2px solid black;'>姓名</th>" +
+                "<th style='border:2px solid black;'>所在部门</th>" +
+                "<th style='border:2px solid black;'>入职时间</th>" +
+                "</tr>" +
+                "<tr>" +
+                "<td style='border:2px solid black;'>" +
+                data.usercode +
+                "</td>" +
+                "<td style='border:2px solid black;'>" +
+                data.username +
+                "</td>" +
+                "<td style='border:2px solid black;'>" +
+                data.department +
+                "</td>" +
+                "<td style='border:2px solid black;'>" +
+                data.hiredate.split("T")[0] +
+                "</td>" +
+                "</tr>" +
+                "</table>"
+            );
+        }
+    })
+    .catch(err => {
+            console.log(err);
+    });
+    }
+</script>
+</html>

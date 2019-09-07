@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanian.five.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.yuanian.five.model.User" >
+    <constructor >
+      <idArg column="usercode" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="department" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="hiredate" jdbcType="DATE" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    usercode, username, department, hiredate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from five
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from five
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanian.five.model.User" >
+    insert into five (usercode, username, department, 
+      hiredate)
+    values (#{usercode,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{hiredate,jdbcType=DATE})
+  </insert>
+  <select id="selectByhiredate">
+    select
+    <include refid="Base_Column_List" />
+    from five
+    where hiredate >= #{starttime} and hiredate &lt; #{lasttime}
+  </select>
+  <insert id="insertSelective" parameterType="com.yuanian.five.model.User" >
+    insert into five
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="hiredate != null" >
+        hiredate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null" >
+        #{hiredate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuanian.five.model.User" >
+    update five
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null" >
+        hiredate = #{hiredate,jdbcType=DATE},
+      </if>
+    </set>
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuanian.five.model.User" >
+    update five
+    set username = #{username,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      hiredate = #{hiredate,jdbcType=DATE}
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </update>
+</mapper>
